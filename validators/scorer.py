@@ -8,7 +8,7 @@ import pandas as pd
 import numpy as np
 
 
-# In[244]:
+# In[289]:
 
 
 def pad_remover(x):
@@ -131,15 +131,16 @@ def recall(df):
 
 
 def Fbeta(precision,recall,item_len,rec_len):
-    """returns fbeta score"""
+    """returns fbeta score
+    note : this contains a slight modified beta score to give more importance to precision"""
     if recall == 0 or precision == 0:
         return 0
     beta = (item_len / rec_len)**2
-    fbeta = (1 + beta)* recall *  precision /((beta * precision) + recall)
+    fbeta = (1 + beta)* recall *  precision /(precision + beta *recall)
     return fbeta
 
 
-# In[245]:
+# In[290]:
 
 
 df_public = pd.read_csv('online_retail_test_public_rajesh.csv')
@@ -151,19 +152,19 @@ df = working_file(df_pub,df_ans)
 df = df.dropna()
 
 
-# In[246]:
+# In[291]:
 
 
 penalty = penalty(df_pub,df_ans)
 
 
-# In[250]:
+# In[292]:
 
 
 score = scorer(df)
 
 
-# In[251]:
+# In[293]:
 
 
 print("the final score is :{}".format(score*(1-penalty)))
