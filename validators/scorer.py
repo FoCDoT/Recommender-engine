@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[45]:
+# In[8]:
 
 
 import pandas as pd
 import numpy as np
 
 
-# In[289]:
+# In[9]:
 
 
 def pad_remover(x):
@@ -69,7 +69,7 @@ def working_file(public, answer):
     return df
 
 
-def scorer(df):
+def scorer(df,df_public):
     """ generates score for a submission 
     """
     if len(df) == 0:
@@ -79,7 +79,7 @@ def scorer(df):
     item_len(df)
     rec_len(df)
     df['fbeta']= df.apply(lambda x:Fbeta(x[3],x[4],x[5],x[6]),axis=1)
-    score = df.fbeta.mean()
+    score = df.fbeta.sum()/float(df_public.CustomerID.nunique())
     return score
 
 
@@ -140,7 +140,7 @@ def Fbeta(precision,recall,item_len,rec_len):
     return fbeta
 
 
-# In[290]:
+# In[10]:
 
 
 df_public = pd.read_csv('online_retail_test_public_rajesh.csv')
@@ -152,22 +152,52 @@ df = working_file(df_pub,df_ans)
 df = df.dropna()
 
 
-# In[291]:
+# In[11]:
 
 
 penalty = penalty(df_pub,df_ans)
 
 
-# In[292]:
+# In[12]:
 
 
-score = scorer(df)
+score = scorer(df,df_public)
 
 
-# In[293]:
+# In[13]:
 
 
-print("the final score is :{}".format(score*(1-penalty)))
+print("the final score is :{}".format(score))
+
+
+# In[14]:
+
+
+precision_helper([1,2,3],['a','b'])
+
+
+# In[15]:
+
+
+precision_helper([1,2],[3,4])
+
+
+# In[16]:
+
+
+precision_helper([1,2,3,4,5],[2,3,4,5,6,7,8])
+
+
+# In[17]:
+
+
+precision_helper([1,2,3],[1,2,3])
+
+
+# In[20]:
+
+
+print(df.columns)
 
 
 # In[ ]:
